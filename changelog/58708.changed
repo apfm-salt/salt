@@ -1,0 +1,1 @@
+Replaced calls to `botomod._exactly_one()` with `salt.utils.exactly_one()`

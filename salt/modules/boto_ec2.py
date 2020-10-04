@@ -335,7 +335,7 @@ def release_eip_address(
     """
     if not salt.utils.data.exactly_one((public_ip, allocation_id)):
         raise SaltInvocationError(
-            "Exactly one of 'public_ip' OR " "'allocation_id' must be provided"
+            "Exactly one of 'public_ip' OR 'allocation_id' must be provided"
         )
 
     conn = _get_conn(region=region, key=key, keyid=keyid, profile=profile)
@@ -398,9 +398,7 @@ def associate_eip_address(
         (instance_id, instance_name, network_interface_id, network_interface_name)
     ):
         raise SaltInvocationError(
-            "Exactly one of 'instance_id', "
-            "'instance_name', 'network_interface_id', "
-            "'network_interface_name' must be provided"
+            "Exactly one of 'instance_id', 'instance_name', 'network_interface_id', 'network_interface_name' must be provided"
         )
 
     conn = _get_conn(region=region, key=key, keyid=keyid, profile=profile)
@@ -526,8 +524,7 @@ def assign_private_ip_addresses(
     """
     if not salt.utils.data.exactly_one((network_interface_name, network_interface_id)):
         raise SaltInvocationError(
-            "Exactly one of 'network_interface_name', "
-            "'network_interface_id' must be provided"
+            "Exactly one of 'network_interface_name', 'network_interface_id' must be provided"
         )
 
     conn = _get_conn(region=region, key=key, keyid=keyid, profile=profile)
@@ -596,8 +593,7 @@ def unassign_private_ip_addresses(
     """
     if not salt.utils.data.exactly_one((network_interface_name, network_interface_id)):
         raise SaltInvocationError(
-            "Exactly one of 'network_interface_name', "
-            "'network_interface_id' must be provided"
+            "Exactly one of 'network_interface_name', 'network_interface_id' must be provided"
         )
 
     conn = _get_conn(region=region, key=key, keyid=keyid, profile=profile)
@@ -1798,7 +1794,7 @@ def create_network_interface(
     """
     if not salt.utils.data.exactly_one((subnet_id, subnet_name)):
         raise SaltInvocationError(
-            "One (but not both) of subnet_id or " "subnet_name must be provided."
+            "One (but not both) of subnet_id or subnet_name must be provided."
         )
 
     if subnet_name:
@@ -1908,14 +1904,12 @@ def attach_network_interface(
     """
     if not salt.utils.data.exactly_one((name, network_interface_id)):
         raise SaltInvocationError(
-            "Exactly one (but not both) of 'name' or 'network_interface_id' "
-            "must be provided."
+            "Exactly one (but not both) of 'name' or 'network_interface_id' must be provided."
         )
 
     if not salt.utils.data.exactly_one((instance_name, instance_id)):
         raise SaltInvocationError(
-            "Exactly one (but not both) of 'instance_name' or 'instance_id' "
-            "must be provided."
+            "Exactly one (but not both) of 'instance_name' or 'instance_id' must be provided."
         )
 
     conn = _get_conn(region=region, key=key, keyid=keyid, profile=profile)

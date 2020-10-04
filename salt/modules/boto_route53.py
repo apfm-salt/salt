@@ -51,6 +51,7 @@ import time
 import salt.utils.compat
 import salt.utils.odict as odict
 import salt.utils.versions
+from salt.utils.data import exactly_one
 from salt.exceptions import SaltInvocationError
 
 log = logging.getLogger(__name__)
@@ -1064,9 +1065,9 @@ def create_hosted_zone(
     }
 
     if private_zone:
-        if not _exactly_one((vpc_name, vpc_id)):
+        if not exactly_one((vpc_name, vpc_id)):
             raise SaltInvocationError(
-                "Either vpc_name or vpc_id is required " "when creating a private zone."
+                "Either vpc_name or vpc_id is required when creating a private zone."
             )
         vpcs = __salt__["boto_vpc.describe_vpcs"](
             vpc_id=vpc_id,

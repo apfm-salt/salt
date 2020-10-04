@@ -1,0 +1,1 @@
+Removed the following private interfaces `_exactly_one()` and `_exactly_n()` from botomod and boto3mod.

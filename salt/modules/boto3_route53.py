@@ -54,6 +54,7 @@ import time
 
 import salt.utils.compat
 import salt.utils.versions
+from salt.utils.data import exactly_one
 from salt.exceptions import CommandExecutionError, SaltInvocationError
 
 log = logging.getLogger(__name__)
@@ -169,7 +170,7 @@ def find_hosted_zone(
         salt myminion boto3_route53.find_hosted_zone Name=salt.org. \
                 profile='{"region": "us-east-1", "keyid": "A12345678AB", "key": "xblahblahblah"}'
     """
-    if not _exactly_one((Id, Name)):
+    if not exactly_one((Id, Name)):
         raise SaltInvocationError("Exactly one of either Id or Name is required.")
     if PrivateZone is not None and not isinstance(PrivateZone, bool):
         raise SaltInvocationError(
@@ -403,9 +404,9 @@ def create_hosted_zone(
     }
     args.update({"DelegationSetId": DelegationSetId}) if DelegationSetId else None
     if PrivateZone:
-        if not _exactly_one((VPCName, VPCId)):
+        if not exactly_one((VPCName, VPCId)):
             raise SaltInvocationError(
-                "Either VPCName or VPCId is required when creating a " "private zone."
+                "Either VPCName or VPCId is required when creating a private zone."
             )
         vpcs = __salt__["boto_vpc.describe_vpcs"](
             vpc_id=VPCId,
@@ -492,7 +493,7 @@ def update_hosted_zone_comment(
         salt myminion boto3_route53.update_hosted_zone_comment Name=example.org. \
                 Comment="This is an example comment for an example zone"
     """
-    if not _exactly_one((Id, Name)):
+    if not exactly_one((Id, Name)):
         raise SaltInvocationError("Exactly one of either Id or Name is required.")
     conn = _get_conn(region=region, key=key, keyid=keyid, profile=profile)
     if Name:
@@ -585,11 +586,11 @@ def associate_vpc_with_hosted_zone(
                     VPCRegion=us-east-1 Comment="Whoo-hoo!  I added another VPC."
 
     """
-    if not _exactly_one((HostedZoneId, Name)):
+    if not exactly_one((HostedZoneId, Name)):
         raise SaltInvocationError(
             "Exactly one of either HostedZoneId or Name is required."
         )
-    if not _exactly_one((VPCId, VPCName)):
+    if not exactly_one((VPCId, VPCName)):
         raise SaltInvocationError("Exactly one of either VPCId or VPCName is required.")
     if Name:
         # {'PrivateZone': True} because you can only associate VPCs with private hosted zones.
@@ -711,11 +712,11 @@ def disassociate_vpc_from_hosted_zone(
                     VPCRegion=us-east-1 Comment="Whoops!  Don't wanna talk to this-here zone no more."
 
     """
-    if not _exactly_one((HostedZoneId, Name)):
+    if not exactly_one((HostedZoneId, Name)):
         raise SaltInvocationError(
             "Exactly one of either HostedZoneId or Name is required."
         )
-    if not _exactly_one((VPCId, VPCName)):
+    if not exactly_one((VPCId, VPCName)):
         raise SaltInvocationError("Exactly one of either VPCId or VPCName is required.")
     if Name:
         # {'PrivateZone': True} because you can only associate VPCs with private hosted zones.
@@ -993,9 +994,9 @@ def get_resource_records(
 
         salt myminion boto3_route53.get_records test.example.org example.org A
     """
-    if not _exactly_one((HostedZoneId, Name)):
+    if not exactly_one((HostedZoneId, Name)):
         raise SaltInvocationError(
-            "Exactly one of either HostedZoneId or Name must " "be provided."
+            "Exactly one of either HostedZoneId or Name must be provided."
         )
     if Name:
         args = {
@@ -1151,7 +1152,7 @@ def change_resource_record_sets(
                 keyid=A1234567890ABCDEF123 key=xblahblahblah \
                 ChangeBatch="{'Changes': [{'Action': 'UPSERT', 'ResourceRecordSet': $foo}]}"
     """
-    if not _exactly_one((HostedZoneId, Name)):
+    if not exactly_one((HostedZoneId, Name)):
         raise SaltInvocationError(
             "Exactly one of either HostZoneId or Name must be provided."
         )
