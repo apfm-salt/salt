@@ -54,10 +54,9 @@ The below code deletes a key pair:
 import logging
 from time import sleep, time
 
-import salt.utils.data
 import salt.utils.dictupdate as dictupdate
 from salt.exceptions import CommandExecutionError, SaltInvocationError
-from salt.ext.six.moves import range
+from salt.utils.decorators import require_one_of
 
 log = logging.getLogger(__name__)
 
@@ -157,6 +156,7 @@ def key_absent(name, region=None, key=None, keyid=None, profile=None):
     return ret
 
 
+@require_one_of("subnet_id", "subnet_name")
 def eni_present(
     name,
     subnet_id=None,
@@ -230,10 +230,6 @@ def eni_present(
         A dict with region, key and keyid, or a pillar key (string)
         that contains a dict with region, key and keyid.
     """
-    if not salt.utils.data.exactly_one((subnet_id, subnet_name)):
-        raise SaltInvocationError(
-            "One (but not both) of subnet_id or " "subnet_name must be provided."
-        )
     if not groups:
         raise SaltInvocationError("groups is a required argument.")
     if not isinstance(groups, list):
@@ -631,6 +627,8 @@ def snapshot_created(
     return ret
 
 
+@require_one_of("image_id", "image_name")
+@require_one_of("public_ip", "allocation_id", "allocate_eip")
 def instance_present(
     name,
     instance_name=None,
@@ -838,18 +836,6 @@ def instance_present(
     _create = False
     running_states = ("pending", "rebooting", "running", "stopping", "stopped")
     changed_attrs = {}
-
-    if not salt.utils.data.exactly_one((image_id, image_name)):
-        raise SaltInvocationError(
-            "Exactly one of image_id OR " "image_name must be provided."
-        )
-    if (public_ip or allocation_id or allocate_eip) and not salt.utils.data.exactly_one(
-        (public_ip, allocation_id, allocate_eip)
-    ):
-        raise SaltInvocationError(
-            "At most one of public_ip, allocation_id OR "
-            "allocate_eip may be provided."
-        )
 
     if instance_id:
         exists = __salt__["boto_ec2.exists"](
@@ -1334,6 +1320,7 @@ def instance_absent(
     return ret
 
 
+@require_one_of("volume_name", "volume_id", "instance_name", "instance_id")
 def volume_absent(
     name,
     volume_name=None,
@@ -1392,13 +1379,6 @@ def volume_absent(
     filters = {}
     running_states = ("pending", "rebooting", "running", "stopping", "stopped")
 
-    if not salt.utils.data.exactly_one(
-        (volume_name, volume_id, instance_name, instance_id)
-    ):
-        raise SaltInvocationError(
-            "Exactly one of 'volume_name', 'volume_id', "
-            "'instance_name', or 'instance_id' must be provided."
-        )
     if (instance_name or instance_id) and not device:
         raise SaltInvocationError(
             "Parameter 'device' is required when either "
@@ -1552,6 +1532,8 @@ def volumes_tagged(
     return ret
 
 
+@require_one_of("volume_name", "volume_id")
+@require_one_of("instance_name", "instance_id")
 def volume_present(
     name,
     volume_name=None,
@@ -1645,14 +1627,6 @@ def volume_present(
     new_dict = {}
     running_states = ("running", "stopped")
 
-    if not salt.utils.data.exactly_one((volume_name, volume_id)):
-        raise SaltInvocationError(
-            "Exactly one of 'volume_name', 'volume_id', " " must be provided."
-        )
-    if not salt.utils.data.exactly_one((instance_name, instance_id)):
-        raise SaltInvocationError(
-            "Exactly one of 'instance_name', or 'instance_id'" " must be provided."
-        )
     if device is None:
         raise SaltInvocationError("Parameter 'device' is required.")
     args = {"region": region, "key": key, "keyid": keyid, "profile": profile}
@@ -1800,6 +1774,7 @@ def volume_present(
     return ret
 
 
+@require_one_of("network_interface_name", "network_interface_id")
 def private_ips_present(
     name,
     network_interface_name=None,
@@ -1834,13 +1809,6 @@ def private_ips_present(
         (variable) - A dict with region, key and keyid, or a pillar key (string) that contains a
         dict with region, key and keyid.
     """
-
-    if not salt.utils.data.exactly_one((network_interface_name, network_interface_id)):
-        raise SaltInvocationError(
-            "Exactly one of 'network_interface_name', "
-            "'network_interface_id' must be provided"
-        )
-
     if not private_ip_addresses:
         raise SaltInvocationError(
             "You must provide the private_ip_addresses to associate with the " "ENI"
@@ -1941,6 +1909,7 @@ def private_ips_present(
     return ret
 
 
+@require_one_of("network_interface_name", "network_interface_id")
 def private_ips_absent(
     name,
     network_interface_name=None,
@@ -1971,13 +1940,6 @@ def private_ips_absent(
         (variable) - A dict with region, key and keyid, or a pillar key (string) that contains a
         dict with region, key and keyid.
     """
-
-    if not salt.utils.data.exactly_one((network_interface_name, network_interface_id)):
-        raise SaltInvocationError(
-            "Exactly one of 'network_interface_name', "
-            "'network_interface_id' must be provided"
-        )
-
     if not private_ip_addresses:
         raise SaltInvocationError(
             "You must provide the private_ip_addresses to unassociate with " "the ENI"

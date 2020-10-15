@@ -50,6 +50,7 @@ import time
 import salt.utils.odict as odict
 import salt.utils.versions
 from salt.exceptions import SaltInvocationError
+from salt.utils.decorators import require_one_of
 
 log = logging.getLogger(__name__)
 
@@ -473,6 +474,7 @@ def subnet_group_exists(
         return False
 
 
+@require_one_of("subnet_ids", "subnet_names")
 def create_subnet_group(
     name,
     description,
@@ -493,10 +495,6 @@ def create_subnet_group(
             "group description" subnet_ids='[subnet-12345678, subnet-87654321]' \
             region=us-east-1
     """
-    if not _exactly_one((subnet_ids, subnet_names)):
-        raise SaltInvocationError(
-            "Exactly one of either 'subnet_ids' or " "'subnet_names' must be provided."
-        )
     conn = _get_conn(region=region, key=key, keyid=keyid, profile=profile)
     if not conn:
         return False
