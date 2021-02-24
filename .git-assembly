@@ -1,0 +1,5 @@
+stage master origin/master
+
+# Git Assembler and Project README.md
+rebase misc/boto3_refactoring_project origin/master
+merge master misc/boto3_refactoring_project
