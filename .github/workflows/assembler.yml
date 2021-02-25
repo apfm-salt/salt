@@ -22,8 +22,6 @@ jobs:
           rm -rf git-assembler
 
       - uses: actions/checkout@v2
-        with:
-          ref: wip/boto3_master
 
       - name: Assemble master
         run: |
@@ -31,6 +29,10 @@ jobs:
           git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
           git remote add upstream "https://github.com/saltstack/salt.git"
           git fetch --all
+          for branch in $(awk '/^[[:space:]]+rebase/{print$2}' .git-assembly); do
+            git checkout --track "${branch}"
+          done
+          git checkout wip/boto3_master
           git assembler --config .git-assembly --assemble --verbose --create
           git checkout master
           git push --verbose --force origin master
