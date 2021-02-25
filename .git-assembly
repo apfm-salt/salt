@@ -1,0 +1,33 @@
+stage master upstream/master
+
+# Git Assembler and Project README.md
+rebase wip/boto3_master upstream/master
+merge master wip/boto3_master
+
+# one_of() utility decorator
+rebase feat/one_of_decorators upstream/master
+merge master feat/one_of_decorators
+
+##
+# WIP exactly_one() decorator boto usage
+#
+# FIXME split these commits such that each salt module's specific change is
+# part of that submodule's topic branch.
+#rebase wip/boto_exactly_one feat/one_of_decorators
+#merge master wip/boto_exactly_one
+
+##
+# WIP one_of() decorator boto usage
+#
+# FIXME split these commits such that each salt module's specific change is
+# part of that submodule's topic branch.
+#rebase wip/boto_one_of_decorators feat/one_of_decorators
+#merge master wip/boto_one_of_decorators
+
+##
+# WIP instance metadata
+# All AWS EC2/ECS instances can probe their instance metadata to locate their
+# current AWS region.  We should be obeying this as the default region as
+# opposed to assuming a hard-coded default of us-east-1
+#rebase wip/instance_metadata upstream/master
+#merge master wip/instance_metadata
