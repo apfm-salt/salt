@@ -23,3 +23,11 @@ merge master feat/one_of_decorators
 # part of that submodule's topic branch.
 #rebase wip/boto_one_of_decorators feat/one_of_decorators
 #merge master wip/boto_one_of_decorators
+
+##
+# WIP instance metadata
+# All AWS EC2/ECS instances can probe their instance metadata to locate their
+# current AWS region.  We should be obeying this as the default region as
+# opposed to assuming a hard-coded default of us-east-1
+#rebase wip/instance_metadata origin/master
+#merge master wip/instance_metadata
