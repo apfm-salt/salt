@@ -180,7 +180,7 @@ feat/boto_deprecate_elasticache origin/master
 feat/boto_deprecate_route53 origin/master
 feat/boto_deprecate_sns origin/master
 feat/boto3_refactor_s3 origin/master
-misc/boto3_project origin/master
+wip/boto3_master origin/master
 ```
 
 _note: `origin` in this context is the [SaltStack][] `origin`_
@@ -191,7 +191,7 @@ It will be the job of [Git Assembler][] to update `master` from all
 branches.
 
 All changes to the [Git Assembler][] [assembly file](.git-assembly) should be
-made on the `misc/boto3_project` branch and `git fetch --all` should always be
+made on the `wip/boto3-master` branch and `git fetch --all` should always be
 run before running [Git Assembler][]. _note: it is recommended that you create
 a symlink from `.git/assembly` to the `.git-assembly` file located in the
 topdir._
