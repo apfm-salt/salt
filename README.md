@@ -161,6 +161,10 @@ All topic branches should be based against the upstream [SaltStack][] master.
 ```
 [pull]
 	rebase = true
+[remote "upstream"]
+        url = https://github.com/saltstack/salt.git
+        gh-resolved = base
+        fetch = +refs/heads/*:refs/remotes/upsteam/*
 [remote "origin"]
         url = https://github.com/saltstack/salt.git
         pushurl = ssh://git@github.com/example/salt.git
