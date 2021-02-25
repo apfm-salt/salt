@@ -3,3 +3,7 @@ stage master origin/master
 # Git Assembler and Project README.md
 rebase wip/boto3_master origin/master
 merge master wip/boto3_master
+
+# one_of() utility decorator
+rebase feat/one_of_decorators origin/master
+merge master feat/one_of_decorators
