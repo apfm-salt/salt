@@ -8,6 +8,18 @@ merge master wip/boto3_master
 rebase feat/one_of_decorators origin/master
 merge master feat/one_of_decorators
 
-# WIP pivot to using the exactly_one() decorator
-rebase wip/boto_exactly_one origin/master
-merge master wip/boto_exactly_one
+##
+# WIP exactly_one() decorator boto usage
+#
+# FIXME split these commits such that each salt module's specific change is
+# part of that submodule's topic branch.
+#rebase wip/boto_exactly_one feat/one_of_decorators
+#merge master wip/boto_exactly_one
+
+##
+# WIP one_of() decorator boto usage
+#
+# FIXME split these commits such that each salt module's specific change is
+# part of that submodule's topic branch.
+#rebase wip/boto_one_of_decorators feat/one_of_decorators
+#merge master wip/boto_one_of_decorators
