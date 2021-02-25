@@ -51,4 +51,4 @@ jobs:
           done
           git checkout master
           git branch -D wip/boto3-tmp-tagging
-          git push -f --tags
+          git push -f --tags origin
