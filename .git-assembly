@@ -7,3 +7,7 @@ merge master wip/boto3_master
 # one_of() utility decorator
 rebase feat/one_of_decorators origin/master
 merge master feat/one_of_decorators
+
+# WIP pivot to using the exactly_one() decorator
+rebase wip/boto_exactly_one origin/master
+merge master wip/boto_exactly_one
