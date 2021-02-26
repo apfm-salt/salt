@@ -1,0 +1,59 @@
+name: Git-Assembler
+
+on:
+  push:
+    branches-ignore:
+      - master
+    tags-ignore:
+      - 'v*-boto3'
+
+jobs:
+  assembler:
+    name: Generate master using Git-Assembler
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install System Deps
+        run: 'sudo apt-get update && sudo apt-get install -y git'
+
+      - name: Install Git-Assembler
+        run: |
+          git clone https://gitlab.com/wavexx/git-assembler git-assembler
+          sudo install -m 0755 git-assembler/git-assembler /usr/local/bin/
+          rm -rf git-assembler
+
+      - uses: actions/checkout@v2
+        with:
+          ref: wip/boto3_master
+
+      - name: Assemble master
+        run: |
+          git config user.name "${GITHUB_ACTOR}"
+          git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+          git remote set-url --push origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git fetch --all
+          for branch in $(awk '/^[[:space:]]*rebase/{print$2}' .git-assembly); do
+            test "${branch}" != 'wip/boto3_master' || continue
+            git checkout --track "origin/${branch}"
+          done
+          git checkout wip/boto3_master
+          git remote add upstream "https://github.com/saltstack/salt.git"
+          git fetch --all
+          git assembler --config .git-assembly --assemble --verbose
+          git checkout master
+          git push --verbose --force origin master
+
+#      - name: Update Releases
+#        run: |
+#          git fetch --all
+#          TAGS="$(git tag -l | grep -P '^v3\d\d\d\d*' | grep -Pv '\drc\d+' | grep -v '_docs$')"
+#          for tag in ${TAGS}; do
+#            git checkout master
+#            echo "Tagging ${tag}-boto3"
+#            git branch --force wip/boto3-tmp-tagging "${tag}"
+#            git checkout wip/boto3-tmp-tagging
+#            git rev-list --reverse upstream/master...master | git cherry-pick --stdin
+#            git tag --force "${tag}-boto3"
+#          done
+#          git checkout master
+#          git branch -D wip/boto3-tmp-tagging
+#          git push -f --tags origin
