@@ -149,3 +149,34 @@ def upload_file(
 
     log.info("S3 object uploaded to %s", name)
     return {"result": True}
+
+
+def download_file(
+    source, name, extra_args=None, region=None, key=None, keyid=None, profile=None,
+):
+    """
+    Upload a local file as an S3 object.
+
+    CLI Example:
+
+    .. code-block:: bash
+
+        salt myminion boto3_s3.download_file \\
+                         my_bucket/path/to/object \\
+                         /path/to/local/file \\
+                         region=us-east-1 \\
+                         key=key \\
+                         keyid=keyid \\
+                         profile=profile \\
+    """
+    bucket, _, s3_key = source.partition("/")
+
+    conn = _get_conn(region=region, key=key, keyid=keyid, profile=profile)
+
+    try:
+        conn.download_file(bucket, s3_key, name, s3_key, ExtraArgs=extra_args)
+    except boto3.exceptions.S3DownloadFailedError as e:
+        return {"error": __utils__["boto3.get_error"](e)}
+
+    log.info("S3 object downloaded to %s", name)
+    return {"result": True}
