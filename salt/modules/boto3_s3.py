@@ -53,7 +53,6 @@ Connection module for Amazon S3 using boto3
 import logging
 
 import salt.utils.versions
-from salt.utils.decorators import is_deprecated
 
 log = logging.getLogger(__name__)
 
@@ -85,7 +84,6 @@ def __init__(opts):  # pylint: disable=unused-argument
         __utils__["boto3.assign_funcs"](__name__, "s3")
 
 
-@is_deprecated(globals(), "Aluminium", with_successor="boto3_s3.get_object_metadata")
 def get_object_metadata(
     name, extra_args=None, region=None, key=None, keyid=None, profile=None,
 ):
@@ -99,7 +97,7 @@ def get_object_metadata(
 
     .. code-block:: bash
 
-        salt myminion boto_s3.get_object_metadata \\
+        salt myminion boto3_s3.get_object_metadata \\
                          my_bucket/path/to/object \\
                          region=us-east-1 \\
                          key=key \\
@@ -132,7 +130,7 @@ def upload_file(
 
     .. code-block:: bash
 
-        salt myminion boto_s3.upload_file \\
+        salt myminion boto3_s3.upload_file \\
                          /path/to/local/file \\
                          my_bucket/path/to/object \\
                          region=us-east-1 \\

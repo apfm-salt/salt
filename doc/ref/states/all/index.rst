@@ -34,6 +34,7 @@ state modules
     boto3_elasticache
     boto3_elasticsearch
     boto3_route53
+    boto3_s3
     boto3_sns
     boto_apigateway
     boto_asg

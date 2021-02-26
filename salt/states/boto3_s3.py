@@ -37,7 +37,7 @@ config:
 .. code-block:: yaml
 
     Ensure s3 object exists:
-        boto_s3.object_present:
+        boto3_s3.object_present:
             - name: s3-bucket/s3-key
             - source: /path/to/local/file
             - region: us-east-1
@@ -54,7 +54,6 @@ import difflib
 import logging
 
 import salt.utils.hashutils
-from salt.utils.decorators import is_deprecated
 
 log = logging.getLogger(__name__)
 
@@ -63,9 +62,9 @@ def __virtual__():
     """
     Only load if boto is available.
     """
-    if "boto_s3.get_object_metadata" not in __salt__:
-        return (False, "boto_s3 module could not be loaded")
-    return "boto_s3"
+    if "boto3_s3.get_object_metadata" not in __salt__:
+        return (False, "boto3_s3 module could not be loaded")
+    return "boto3_s3"
 
 
 # Keys for `extra_args` that we support.
@@ -105,13 +104,12 @@ GET_METADATA_EXTRA_ARGS = frozenset(
 )
 
 
-@is_deprecated(globals(), "Aluminium", with_successor="boto3_s3.object_present")
 def object_present(
     name,
     source=None,
     hash_type=None,
     extra_args=None,
-    extra_args_from_pillar="boto_s3_object_extra_args",
+    extra_args_from_pillar="boto3_s3_object_extra_args",
     region=None,
     key=None,
     keyid=None,
@@ -205,7 +203,7 @@ def object_present(
             ret["result"] = False
             ret["comment"] = (
                 "Salt uses the {} metadata key internally,"
-                "do not pass it to the boto_s3.object_present state."
+                "do not pass it to the boto3_s3.object_present state."
             ).format(HASH_METADATA_KEY)
             return ret
     combined_extra_args["Metadata"][HASH_METADATA_KEY] = digest
@@ -219,7 +217,7 @@ def object_present(
     metadata_extra_args = {
         k: v for k, v in combined_extra_args.items() if k in GET_METADATA_EXTRA_ARGS
     }
-    r = __salt__["boto_s3.get_object_metadata"](
+    r = __salt__["boto3_s3.get_object_metadata"](
         name,
         extra_args=metadata_extra_args,
         region=region,
@@ -274,7 +272,7 @@ def object_present(
         ret["changes"] = {"diff": changes_diff}
         return ret
 
-    r = __salt__["boto_s3.upload_file"](
+    r = __salt__["boto3_s3.upload_file"](
         source,
         name,
         extra_args=combined_extra_args,
