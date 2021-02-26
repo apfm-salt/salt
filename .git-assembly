@@ -8,6 +8,10 @@ merge master wip/boto3_master
 rebase feat/one_of_decorators upstream/master
 merge master feat/one_of_decorators
 
+# WIP boto3_s3 support
+rebase wip/boto3_s3 upstream/master
+merge master wip/boto3_s3
+
 ##
 # WIP exactly_one() decorator boto usage
 #
