@@ -34,6 +34,7 @@ state modules
     boto3_elasticache
     boto3_elasticsearch
     boto3_route53
+    boto3_s3
     boto3_sns
     boto_apigateway
     boto_asg
@@ -59,7 +60,6 @@ state modules
     boto_lc
     boto_rds
     boto_route53
-    boto_s3
     boto_s3_bucket
     boto_secgroup
     boto_sns
