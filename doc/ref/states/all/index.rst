@@ -60,6 +60,7 @@ state modules
     boto_lc
     boto_rds
     boto_route53
+    boto_s3
     boto_s3_bucket
     boto_secgroup
     boto_sns
