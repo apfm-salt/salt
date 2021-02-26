@@ -97,7 +97,7 @@ def get_object_metadata(
 
     .. code-block:: bash
 
-        salt myminion boto_s3.get_object_metadata \\
+        salt myminion boto3_s3.get_object_metadata \\
                          my_bucket/path/to/object \\
                          region=us-east-1 \\
                          key=key \\
@@ -130,7 +130,7 @@ def upload_file(
 
     .. code-block:: bash
 
-        salt myminion boto_s3.upload_file \\
+        salt myminion boto3_s3.upload_file \\
                          /path/to/local/file \\
                          my_bucket/path/to/object \\
                          region=us-east-1 \\
